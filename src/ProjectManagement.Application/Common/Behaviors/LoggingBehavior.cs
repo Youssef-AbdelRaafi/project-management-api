@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace ProjectManagement.Application.Common.Behaviors;
 
 /// <summary>
-/// Logs MediatR request execution without serializing potentially sensitive payloads.
+/// Logs the start and successful completion of MediatR request execution.
 /// </summary>
 /// <typeparam name="TRequest">The request type.</typeparam>
 /// <typeparam name="TResponse">The response type.</typeparam>
@@ -14,8 +14,6 @@ public sealed class LoggingBehavior<TRequest, TResponse>(
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    private const long SlowRequestThresholdMilliseconds = 500;
-
     /// <inheritdoc />
     public async Task<TResponse> Handle(
         TRequest request,
@@ -27,40 +25,14 @@ public sealed class LoggingBehavior<TRequest, TResponse>(
         logger.LogInformation("Handling application request {RequestName}", requestName);
 
         var stopwatch = Stopwatch.StartNew();
+        var response = await next();
+        stopwatch.Stop();
 
-        try
-        {
-            var response = await next();
-            stopwatch.Stop();
+        logger.LogInformation(
+            "Application request {RequestName} completed successfully in {ElapsedMilliseconds} ms",
+            requestName,
+            stopwatch.ElapsedMilliseconds);
 
-            if (stopwatch.ElapsedMilliseconds > SlowRequestThresholdMilliseconds)
-            {
-                logger.LogWarning(
-                    "Application request {RequestName} completed successfully in {ElapsedMilliseconds} ms",
-                    requestName,
-                    stopwatch.ElapsedMilliseconds);
-            }
-            else
-            {
-                logger.LogInformation(
-                    "Application request {RequestName} completed successfully in {ElapsedMilliseconds} ms",
-                    requestName,
-                    stopwatch.ElapsedMilliseconds);
-            }
-
-            return response;
-        }
-        catch (Exception exception)
-        {
-            stopwatch.Stop();
-
-            logger.LogError(
-                exception,
-                "Application request {RequestName} failed after {ElapsedMilliseconds} ms",
-                requestName,
-                stopwatch.ElapsedMilliseconds);
-
-            throw;
-        }
+        return response;
     }
 }
