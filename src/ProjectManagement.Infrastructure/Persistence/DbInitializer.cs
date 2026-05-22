@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Domain.Constants;
-using ProjectManagement.Domain.Entities;
 using ProjectManagement.Infrastructure.Identity;
 
 namespace ProjectManagement.Infrastructure.Persistence;

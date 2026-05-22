@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Domain.Constants;
-using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Identity;
 
@@ -10,7 +10,7 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
 {
     private const string InvalidCredentialsMessage = "Invalid email or password.";
 
-    public async Task<Result<ApplicationUser>> RegisterAsync(
+    public async Task<Result<UserAccount>> RegisterAsync(
         string email,
         string password,
         string fullName,
@@ -23,7 +23,7 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
 
         if (!identityResult.Succeeded)
         {
-            return Result<ApplicationUser>.ValidationFailure(
+            return Result<UserAccount>.ValidationFailure(
                 identityResult.Errors.Select(error => error.Description).ToList());
         }
 
@@ -33,14 +33,14 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
         {
             await userManager.DeleteAsync(user);
 
-            return Result<ApplicationUser>.ValidationFailure(
+            return Result<UserAccount>.ValidationFailure(
                 addRoleResult.Errors.Select(error => error.Description).ToList());
         }
 
-        return Result<ApplicationUser>.Success(user, StatusCodes.Created);
+        return Result<UserAccount>.Success(ToUserAccount(user), StatusCodes.Created);
     }
 
-    public async Task<Result<ApplicationUser>> LoginAsync(
+    public async Task<Result<UserAccount>> LoginAsync(
         string email,
         string password,
         CancellationToken cancellationToken)
@@ -51,25 +51,51 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
 
         if (user is null || !await userManager.CheckPasswordAsync(user, password))
         {
-            return Result<ApplicationUser>.Failure(InvalidCredentialsMessage, StatusCodes.Unauthorized);
+            return Result<UserAccount>.Failure(InvalidCredentialsMessage, StatusCodes.Unauthorized);
         }
 
-        return Result<ApplicationUser>.Success(user);
+        return Result<UserAccount>.Success(ToUserAccount(user));
     }
 
-    public async Task<ApplicationUser?> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
+    public async Task<UserAccount?> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId);
+
+        return user is null ? null : ToUserAccount(user);
     }
 
     public async Task<IReadOnlyCollection<string>> GetUserRolesAsync(
-        ApplicationUser user,
+        UserAccount user,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var roles = await userManager.GetRolesAsync(user);
+        var applicationUser = await userManager.FindByIdAsync(user.Id);
+
+        if (applicationUser is null)
+        {
+            return [];
+        }
+
+        var roles = await userManager.GetRolesAsync(applicationUser);
         return roles.ToArray();
+    }
+
+    public async Task<IReadOnlyCollection<UserAccount>> GetAllUsersAsync(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var users = await userManager.Users
+            .AsNoTracking()
+            .Select(user => new UserAccount(user.Id, user.Email ?? string.Empty, user.FullName))
+            .ToListAsync(cancellationToken);
+
+        return users;
+    }
+
+    private static UserAccount ToUserAccount(ApplicationUser user)
+    {
+        return new UserAccount(user.Id, user.Email ?? string.Empty, user.FullName);
     }
 }

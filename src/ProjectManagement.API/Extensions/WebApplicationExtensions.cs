@@ -1,4 +1,4 @@
-﻿using Asp.Versioning.ApiExplorer;
+using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Infrastructure.Persistence;
 using Serilog;

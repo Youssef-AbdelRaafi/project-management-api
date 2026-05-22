@@ -47,12 +47,12 @@ Runtime composition happens in the API project. The Domain remains independent f
 
 The Domain layer contains the business model and rules:
 
-- `Project`, `TaskItem`, `ApplicationUser`, and `RefreshToken`
+- `Project`, `TaskItem`, and `RefreshToken`
 - Domain constants and enums
 - Domain-specific exceptions
 - Entity factory methods and behavior such as `Project.Update(...)` and `TaskItem.UpdateStatus(...)`
 
-The Domain layer does not know about EF Core, MediatR, ASP.NET Core hosting, SQL Server, or JWT. The one deliberate exception is `ApplicationUser`, which extends `IdentityUser` from `Microsoft.Extensions.Identity.Stores`. This is a conscious trade-off: wrapping Identity's user model behind a custom abstraction would add indirection without meaningful benefit for this scope, since `IdentityUser` is a stable, framework-provided base with no infrastructure coupling.
+The Domain layer does not know about EF Core, MediatR, ASP.NET Core Identity, ASP.NET Core hosting, SQL Server, or JWT. Projects and refresh tokens store the user identifier they need for ownership and relationships, while the concrete Identity user type stays in Infrastructure.
 
 ### Application
 
@@ -64,6 +64,7 @@ The Application layer contains use cases:
 - FluentValidation validators
 - Pipeline behaviors for validation, logging, performance monitoring, and unhandled exceptions
 - Interfaces such as `IApplicationDbContext`, `ICurrentUserService`, `IIdentityService`, and `IJwtService`
+- Application-level identity models such as `UserAccount`
 
 This layer coordinates business flow but does not contain persistence implementation details.
 
@@ -76,6 +77,7 @@ The Infrastructure layer implements external concerns:
 - Migrations
 - Audit and soft-delete interceptors
 - ASP.NET Core Identity integration
+- Infrastructure `ApplicationUser` implementation
 - JWT generation and refresh-token hashing
 - Current-user resolution from HTTP context
 - Role seeding and optional admin seeding

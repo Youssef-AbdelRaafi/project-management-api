@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.Application.Common.Models;
+namespace ProjectManagement.Application.Common.Models;
 
 public sealed class PaginationParams
 {

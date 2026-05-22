@@ -1,10 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagement.Application.Common.Interfaces;
+using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Identity;
@@ -15,7 +16,7 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
 
     private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
-    public string GenerateAccessToken(ApplicationUser user, IReadOnlyCollection<string> roles)
+    public string GenerateAccessToken(UserAccount user, IReadOnlyCollection<string> roles)
     {
         ArgumentNullException.ThrowIfNull(user);
         ArgumentNullException.ThrowIfNull(roles);

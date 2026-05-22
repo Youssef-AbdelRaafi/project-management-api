@@ -1,4 +1,5 @@
-﻿using ProjectManagement.Domain.Entities;
+using ProjectManagement.Domain.Entities;
+using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Domain.Enums;
 using DomainTaskStatus = ProjectManagement.Domain.Enums.TaskStatus;
 
@@ -12,15 +13,12 @@ public static class TestDataFactory
 
     public const string UserEmail = "owner@example.com";
 
-    public static ApplicationUser CreateUser(
+    public static UserAccount CreateUser(
         string id = UserId,
         string email = UserEmail,
         string fullName = "Test User")
     {
-        var user = ApplicationUser.Create(email, fullName);
-        user.Id = id;
-
-        return user;
+        return new UserAccount(id, email, fullName);
     }
 
     public static Project CreateProject(

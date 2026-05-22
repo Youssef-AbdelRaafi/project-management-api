@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using ProjectManagement.Application.Common.Models;
 
 namespace ProjectManagement.Application.Features.Projects.Queries.GetAllProjects;

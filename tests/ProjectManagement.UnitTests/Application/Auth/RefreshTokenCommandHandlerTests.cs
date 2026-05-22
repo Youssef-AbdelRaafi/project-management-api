@@ -5,7 +5,6 @@ using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Auth.Commands.RefreshToken;
 using ProjectManagement.Application.Features.Auth.DTOs;
 using ProjectManagement.Domain.Constants;
-using ProjectManagement.Domain.Entities;
 using ProjectManagement.UnitTests.Common;
 using AppStatusCodes = ProjectManagement.Application.Common.Models.StatusCodes;
 using DomainRefreshToken = ProjectManagement.Domain.Entities.RefreshToken;

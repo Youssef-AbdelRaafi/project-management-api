@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Tasks.DTOs;
 using ProjectManagement.Domain.Enums;

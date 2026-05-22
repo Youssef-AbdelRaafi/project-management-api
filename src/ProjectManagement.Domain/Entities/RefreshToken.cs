@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Domain.Common;
+using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Exceptions;
 
 namespace ProjectManagement.Domain.Entities;
@@ -35,8 +35,6 @@ public sealed class RefreshToken : BaseEntity
     public string? RevokedReason { get; private set; }
 
     public string UserId { get; private set; } = string.Empty;
-
-    public ApplicationUser? User { get; private set; }
 
     public bool IsRevoked => RevokedAt is not null;
 

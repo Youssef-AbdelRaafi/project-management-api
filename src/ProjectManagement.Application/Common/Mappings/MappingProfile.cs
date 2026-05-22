@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using ProjectManagement.Application.Features.Projects.DTOs;
 using ProjectManagement.Application.Features.Tasks.DTOs;
 using ProjectManagement.Domain.Entities;

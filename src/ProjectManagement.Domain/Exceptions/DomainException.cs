@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.Domain.Exceptions;
+namespace ProjectManagement.Domain.Exceptions;
 
 public class DomainException : Exception
 {

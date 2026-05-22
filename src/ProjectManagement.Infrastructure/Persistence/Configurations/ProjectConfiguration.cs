@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Entities;
+using ProjectManagement.Infrastructure.Identity;
 
 namespace ProjectManagement.Infrastructure.Persistence.Configurations;
 
@@ -26,7 +27,7 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasIndex(project => project.UserId);
         builder.HasIndex(project => project.IsDeleted);
 
-        builder.HasOne(project => project.User)
+        builder.HasOne<ApplicationUser>()
             .WithMany(user => user.Projects)
             .HasForeignKey(project => project.UserId)
             .OnDelete(DeleteBehavior.Restrict);

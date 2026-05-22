@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.Domain.Enums;
+namespace ProjectManagement.Domain.Enums;
 
 public enum TaskStatus
 {

@@ -5,7 +5,6 @@ using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Auth.Commands.Login;
 using ProjectManagement.Application.Features.Auth.DTOs;
 using ProjectManagement.Domain.Constants;
-using ProjectManagement.Domain.Entities;
 using ProjectManagement.UnitTests.Common;
 using AppStatusCodes = ProjectManagement.Application.Common.Models.StatusCodes;
 
@@ -25,7 +24,7 @@ public sealed class LoginCommandHandlerTests : TestBase
                 command.Email,
                 command.Password,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result<ApplicationUser>.Success(user));
+            .ReturnsAsync(Result<UserAccount>.Success(user));
 
         IdentityServiceMock
             .Setup(service => service.GetUserRolesAsync(user, It.IsAny<CancellationToken>()))
@@ -64,7 +63,7 @@ public sealed class LoginCommandHandlerTests : TestBase
                 command.Email,
                 command.Password,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result<ApplicationUser>.Failure(
+            .ReturnsAsync(Result<UserAccount>.Failure(
                 "Invalid email or password.",
                 AppStatusCodes.Unauthorized));
 
@@ -84,7 +83,7 @@ public sealed class LoginCommandHandlerTests : TestBase
 
         JwtServiceMock.Verify(
             service => service.GenerateAccessToken(
-                It.IsAny<ApplicationUser>(),
+                It.IsAny<UserAccount>(),
                 It.IsAny<IReadOnlyCollection<string>>()),
             Times.Never);
     }

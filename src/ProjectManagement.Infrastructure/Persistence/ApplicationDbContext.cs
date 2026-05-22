@@ -1,9 +1,10 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Entities;
+using ProjectManagement.Infrastructure.Identity;
 
 namespace ProjectManagement.Infrastructure.Persistence;
 

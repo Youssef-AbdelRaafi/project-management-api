@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.Application.Common.Interfaces;
-using ProjectManagement.Domain.Entities;
 using ProjectManagement.Infrastructure.Identity;
 using ProjectManagement.Infrastructure.Persistence;
 using ProjectManagement.Infrastructure.Persistence.Interceptors;

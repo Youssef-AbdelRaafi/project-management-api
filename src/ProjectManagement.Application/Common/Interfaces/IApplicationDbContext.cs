@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Application.Common.Interfaces;

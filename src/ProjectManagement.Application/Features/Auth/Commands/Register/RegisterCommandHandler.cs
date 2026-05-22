@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Auth.DTOs;

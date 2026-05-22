@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Domain.Common;
+using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Enums;
 using ProjectManagement.Domain.Exceptions;
 

@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Domain.Enums;
+using ProjectManagement.Domain.Enums;
 using DomainTaskStatus = ProjectManagement.Domain.Enums.TaskStatus;
 
 namespace ProjectManagement.Application.Features.Tasks.DTOs;

@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.Domain.Constants;
+namespace ProjectManagement.Domain.Constants;
 
 public static class Roles
 {

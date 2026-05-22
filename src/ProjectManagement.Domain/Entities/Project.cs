@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Domain.Common;
+using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Exceptions;
 
 namespace ProjectManagement.Domain.Entities;
@@ -21,8 +21,6 @@ public sealed class Project : AuditableEntity
     public string? Description { get; private set; }
 
     public string UserId { get; private set; } = string.Empty;
-
-    public ApplicationUser? User { get; private set; }
 
     public ICollection<TaskItem> Tasks { get; private set; } = new List<TaskItem>();
 

@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands.UpdateTaskStatus;
 

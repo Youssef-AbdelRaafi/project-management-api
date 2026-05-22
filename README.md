@@ -3,7 +3,7 @@
 ![.NET](https://img.shields.io/badge/.NET-9-blue)
 ![Architecture](https://img.shields.io/badge/Clean%20Architecture-green)
 ![CQRS](https://img.shields.io/badge/CQRS-MediatR-purple)
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
+[![CI](https://github.com/Youssef-AbdelRaafi/project-management-api/actions/workflows/ci.yml/badge.svg)](https://github.com/Youssef-AbdelRaafi/project-management-api/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A production-minded Project and Task Management API built with ASP.NET Core, Clean Architecture, CQRS, Entity Framework Core, SQL Server, JWT authentication, refresh-token rotation, structured logging, Docker, and unit tests.
@@ -116,9 +116,7 @@ The default development connection string uses `Server=.` (localhost) from `apps
 Apply migrations:
 
 ```bash
-dotnet ef database update \
-  --project src/ProjectManagement.Infrastructure \
-  --startup-project src/ProjectManagement.API
+dotnet ef database update --project src/ProjectManagement.Infrastructure --startup-project src/ProjectManagement.API
 ```
 
 EF Core uses a design-time `ApplicationDbContextFactory`, so migrations can run without starting the API host or requiring JWT settings.
@@ -139,9 +137,14 @@ http://localhost:5115/swagger
 
 Create a local `.env` file from the template, set strong local secrets, then run the stack:
 
+```powershell
+copy .env.example .env
+docker compose up --build
+```
+
 ```bash
 cp .env.example .env
-docker-compose up --build
+docker compose up --build
 ```
 
 The API will be available at:

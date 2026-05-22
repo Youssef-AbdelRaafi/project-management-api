@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using ProjectManagement.Domain.Common;
+using ProjectManagement.Domain.Entities;
 using ProjectManagement.Domain.Exceptions;
 
-namespace ProjectManagement.Domain.Entities;
+namespace ProjectManagement.Infrastructure.Identity;
 
 public sealed class ApplicationUser : IdentityUser
 {

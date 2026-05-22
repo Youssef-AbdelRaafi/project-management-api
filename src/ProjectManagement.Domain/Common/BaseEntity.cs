@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.Domain.Common;
+namespace ProjectManagement.Domain.Common;
 
 public abstract class BaseEntity
 {

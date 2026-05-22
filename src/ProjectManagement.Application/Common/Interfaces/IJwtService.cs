@@ -1,10 +1,11 @@
-﻿using ProjectManagement.Domain.Entities;
+using ProjectManagement.Application.Common.Models;
+using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Application.Common.Interfaces;
 
 public interface IJwtService
 {
-    string GenerateAccessToken(ApplicationUser user, IReadOnlyCollection<string> roles);
+    string GenerateAccessToken(UserAccount user, IReadOnlyCollection<string> roles);
 
     DateTimeOffset GetAccessTokenExpiration(DateTimeOffset utcNow);
 

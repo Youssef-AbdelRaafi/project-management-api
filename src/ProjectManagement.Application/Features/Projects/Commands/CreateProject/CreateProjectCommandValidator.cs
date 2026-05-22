@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using ProjectManagement.Domain.Common;
 
 namespace ProjectManagement.Application.Features.Projects.Commands.CreateProject;

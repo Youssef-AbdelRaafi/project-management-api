@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Domain.Exceptions;

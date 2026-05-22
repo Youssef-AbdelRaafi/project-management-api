@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Entities;
+using ProjectManagement.Infrastructure.Identity;
 
 namespace ProjectManagement.Infrastructure.Persistence.Configurations;
 
@@ -38,7 +39,7 @@ public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refresh
         builder.HasIndex(refreshToken => refreshToken.UserId);
         builder.HasIndex(refreshToken => refreshToken.ExpiresAt);
 
-        builder.HasOne(refreshToken => refreshToken.User)
+        builder.HasOne<ApplicationUser>()
             .WithMany(user => user.RefreshTokens)
             .HasForeignKey(refreshToken => refreshToken.UserId)
             .OnDelete(DeleteBehavior.Cascade);

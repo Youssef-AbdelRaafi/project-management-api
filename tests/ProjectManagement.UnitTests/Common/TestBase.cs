@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Mappings;
-using ProjectManagement.Domain.Entities;
+using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Infrastructure.Persistence;
 
 namespace ProjectManagement.UnitTests.Common;
@@ -68,7 +68,7 @@ public abstract class TestBase : IDisposable
     {
         JwtServiceMock
             .Setup(service => service.GenerateAccessToken(
-                It.IsAny<ApplicationUser>(),
+                It.IsAny<UserAccount>(),
                 It.IsAny<IReadOnlyCollection<string>>()))
             .Returns("access-token");
 

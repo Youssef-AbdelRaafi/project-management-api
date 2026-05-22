@@ -1,4 +1,4 @@
-﻿namespace ProjectManagement.Infrastructure.Identity;
+namespace ProjectManagement.Infrastructure.Identity;
 
 public sealed class DefaultAdminSettings
 {

@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using ProjectManagement.Application.Common.Models;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands.DeleteTask;
