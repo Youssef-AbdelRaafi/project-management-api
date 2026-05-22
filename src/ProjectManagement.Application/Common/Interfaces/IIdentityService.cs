@@ -41,4 +41,12 @@ public interface IIdentityService
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>The user when found; otherwise, <c>null</c>.</returns>
     Task<ApplicationUser?> GetUserByIdAsync(string userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets the roles assigned to a user.
+    /// </summary>
+    /// <param name="user">The application user.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The user roles.</returns>
+    Task<IReadOnlyCollection<string>> GetUserRolesAsync(ApplicationUser user, CancellationToken cancellationToken);
 }

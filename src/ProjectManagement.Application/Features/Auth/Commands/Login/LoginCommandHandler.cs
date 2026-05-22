@@ -33,8 +33,9 @@ public sealed class LoginCommandHandler(
         }
 
         var user = loginResult.Data;
+        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
         var utcNow = DateTimeOffset.UtcNow;
-        var accessToken = jwtService.GenerateAccessToken(user);
+        var accessToken = jwtService.GenerateAccessToken(user, roles);
         var accessTokenExpiresAt = jwtService.GetAccessTokenExpiration(utcNow);
         var refreshToken = jwtService.GenerateRefreshToken();
         var refreshTokenHash = jwtService.HashRefreshToken(refreshToken);

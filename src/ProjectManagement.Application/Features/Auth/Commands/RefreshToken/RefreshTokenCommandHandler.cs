@@ -55,7 +55,8 @@ public sealed class RefreshTokenCommandHandler(
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var accessToken = jwtService.GenerateAccessToken(user);
+        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
+        var accessToken = jwtService.GenerateAccessToken(user, roles);
         var accessTokenExpiresAt = jwtService.GetAccessTokenExpiration(utcNow);
 
         return Result<AuthResponseDto>.Success(

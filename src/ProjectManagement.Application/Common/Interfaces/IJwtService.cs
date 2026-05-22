@@ -11,8 +11,9 @@ public interface IJwtService
     /// Generates a short-lived access token for a user.
     /// </summary>
     /// <param name="user">The authenticated user.</param>
+    /// <param name="roles">The roles assigned to the authenticated user.</param>
     /// <returns>The generated JWT access token.</returns>
-    string GenerateAccessToken(ApplicationUser user);
+    string GenerateAccessToken(ApplicationUser user, IReadOnlyCollection<string> roles);
 
     /// <summary>
     /// Calculates when a newly issued access token expires.

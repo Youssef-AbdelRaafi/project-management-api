@@ -19,9 +19,10 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
     private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
     /// <inheritdoc />
-    public string GenerateAccessToken(ApplicationUser user)
+    public string GenerateAccessToken(ApplicationUser user, IReadOnlyCollection<string> roles)
     {
         ArgumentNullException.ThrowIfNull(user);
+        ArgumentNullException.ThrowIfNull(roles);
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
@@ -36,6 +37,8 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
             new(ClaimTypes.Email, user.Email ?? string.Empty),
             new("fullName", user.FullName)
         };
+
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,

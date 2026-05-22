@@ -68,4 +68,15 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
         cancellationToken.ThrowIfCancellationRequested();
         return await userManager.FindByIdAsync(userId);
     }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<string>> GetUserRolesAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var roles = await userManager.GetRolesAsync(user);
+        return roles.ToArray();
+    }
 }
