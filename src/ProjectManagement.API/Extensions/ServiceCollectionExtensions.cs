@@ -1,10 +1,12 @@
 using Asp.Versioning;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using ProjectManagement.API.Middleware;
+using ProjectManagement.API.Swagger;
 using ProjectManagement.Infrastructure.Identity;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ProjectManagement.API.Extensions;
 
@@ -19,7 +21,6 @@ public static class ServiceCollectionExtensions
     public const string CorsPolicyName = "DefaultCorsPolicy";
 
     private const int MinimumJwtSecretBytes = 32;
-    private const string BearerSchemeName = "Bearer";
 
     /// <summary>
     /// Adds API controllers, exception handling, CORS, Swagger, and JWT bearer authentication.
@@ -95,44 +96,8 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
-        services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc(
-                "v1",
-                new OpenApiInfo
-                {
-                    Title = "Project Management API",
-                    Version = "v1",
-                    Description = "Project and task management API with JWT authentication."
-                });
-
-            options.AddSecurityDefinition(
-                BearerSchemeName,
-                new OpenApiSecurityScheme
-                {
-                    Description = "Enter a valid JWT access token.",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT"
-                });
-
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = BearerSchemeName
-                        }
-                    },
-                    []
-                }
-            });
-        });
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+        services.AddSwaggerGen();
 
         return services;
     }

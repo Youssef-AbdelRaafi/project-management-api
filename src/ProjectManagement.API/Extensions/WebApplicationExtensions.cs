@@ -1,3 +1,4 @@
+using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Infrastructure.Persistence;
 using Serilog;
@@ -20,10 +21,19 @@ public static class WebApplicationExtensions
 
         if (app.Environment.IsDevelopment())
         {
+            var apiVersionDescriptionProvider = app.Services
+                .GetRequiredService<IApiVersionDescriptionProvider>();
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Project Management API v1");
+                foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+                {
+                    options.SwaggerEndpoint(
+                        $"/swagger/{description.GroupName}/swagger.json",
+                        description.GroupName.ToUpperInvariant());
+                }
+
                 options.DisplayRequestDuration();
             });
         }
