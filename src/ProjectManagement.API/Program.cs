@@ -1,6 +1,7 @@
 using ProjectManagement.API.Extensions;
 using ProjectManagement.Application;
 using ProjectManagement.Infrastructure;
+using ProjectManagement.Infrastructure.Persistence;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -28,6 +29,7 @@ try
     var app = builder.Build();
 
     await app.ApplyMigrationsAsync();
+    await DbInitializer.SeedRolesAsync(app.Services);
     app.UseApiPipeline();
 
     await app.RunAsync();

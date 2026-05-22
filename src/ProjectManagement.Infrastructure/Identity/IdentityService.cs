@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
+using ProjectManagement.Domain.Constants;
 using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Identity;
@@ -28,6 +29,16 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
         {
             return Result<ApplicationUser>.ValidationFailure(
                 identityResult.Errors.Select(error => error.Description).ToList());
+        }
+
+        var addRoleResult = await userManager.AddToRoleAsync(user, Roles.User);
+
+        if (!addRoleResult.Succeeded)
+        {
+            await userManager.DeleteAsync(user);
+
+            return Result<ApplicationUser>.ValidationFailure(
+                addRoleResult.Errors.Select(error => error.Description).ToList());
         }
 
         return Result<ApplicationUser>.Success(user, StatusCodes.Created);
