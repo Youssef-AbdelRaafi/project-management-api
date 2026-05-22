@@ -111,7 +111,7 @@ dotnet user-secrets init --project src/ProjectManagement.API
 dotnet user-secrets set "JwtSettings:Secret" "<your-long-random-jwt-secret>" --project src/ProjectManagement.API
 ```
 
-The default development connection string uses LocalDB from `appsettings.Development.json`. Override it with `ConnectionStrings:DefaultConnection` if you use a different SQL Server instance.
+The default development connection string uses `Server=.` (localhost) from `appsettings.Development.json`. Override it with `ConnectionStrings:DefaultConnection` if you use a different SQL Server instance.
 
 Apply migrations:
 
@@ -120,6 +120,8 @@ dotnet ef database update \
   --project src/ProjectManagement.Infrastructure \
   --startup-project src/ProjectManagement.API
 ```
+
+EF Core uses a design-time `ApplicationDbContextFactory`, so migrations can run without starting the API host or requiring JWT settings.
 
 Run the API:
 
@@ -251,6 +253,7 @@ Current coverage focuses on handler-level behavior:
 - Refresh-token hashing before persistence
 - Token revocation support during refresh-token rotation
 - Ownership enforcement inside application handlers, not only controllers
+- Environment-aware HTTPS metadata enforcement in JWT configuration
 
 ## Sample API Requests
 

@@ -52,7 +52,7 @@ The Domain layer contains the business model and rules:
 - Domain-specific exceptions
 - Entity factory methods and behavior such as `Project.Update(...)` and `TaskItem.UpdateStatus(...)`
 
-The Domain layer does not know about EF Core, MediatR, ASP.NET Core, SQL Server, or JWT.
+The Domain layer does not know about EF Core, MediatR, ASP.NET Core hosting, SQL Server, or JWT. The one deliberate exception is `ApplicationUser`, which extends `IdentityUser` from `Microsoft.Extensions.Identity.Stores`. This is a conscious trade-off: wrapping Identity's user model behind a custom abstraction would add indirection without meaningful benefit for this scope, since `IdentityUser` is a stable, framework-provided base with no infrastructure coupling.
 
 ### Application
 

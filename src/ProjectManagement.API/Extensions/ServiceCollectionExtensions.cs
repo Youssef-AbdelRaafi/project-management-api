@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -18,7 +18,8 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddApiServices(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();
@@ -26,7 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddHealthChecks();
         services.AddCorsPolicy();
-        services.AddJwtBearerAuthentication(configuration);
+        services.AddJwtBearerAuthentication(configuration, environment);
         services.AddApiVersioningSupport();
         services.AddSwaggerDocumentation();
 
@@ -50,7 +51,8 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddJwtBearerAuthentication(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         var jwtSettings = GetJwtSettings(configuration);
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret));
@@ -63,7 +65,7 @@ public static class ServiceCollectionExtensions
             })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = true;
+                options.RequireHttpsMetadata = !environment.IsDevelopment();
                 options.SaveToken = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
