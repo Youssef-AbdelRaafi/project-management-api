@@ -1,3 +1,4 @@
+using ProjectManagement.API.Extensions;
 using ProjectManagement.Application;
 using ProjectManagement.Infrastructure;
 using Serilog;
@@ -20,29 +21,24 @@ try
             .Enrich.FromLogContext();
     });
 
-    builder.Services.AddControllers();
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration);
-    builder.Services.AddOpenApi();
+    builder.Services.AddApiServices(builder.Configuration);
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-    }
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthentication();
-    app.UseAuthorization();
-
-    app.MapControllers();
+    await app.ApplyMigrationsAsync();
+    app.UseApiPipeline();
 
     await app.RunAsync();
 }
 catch (Exception exception)
 {
+    if (exception.GetType().Name == "HostAbortedException")
+    {
+        return;
+    }
+
     Log.Fatal(exception, "ProjectManagement API terminated unexpectedly");
 }
 finally

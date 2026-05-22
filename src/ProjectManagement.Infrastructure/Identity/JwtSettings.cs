@@ -10,7 +10,7 @@ public sealed class JwtSettings
     /// <summary>
     /// Configuration section name.
     /// </summary>
-    public const string SectionName = "Jwt";
+    public const string SectionName = "JwtSettings";
 
     /// <summary>
     /// Gets the JWT issuer.
@@ -35,11 +35,11 @@ public sealed class JwtSettings
     /// Gets the access token lifetime in minutes.
     /// </summary>
     [Range(1, 120)]
-    public int AccessTokenExpirationMinutes { get; init; } = 15;
+    public int AccessTokenExpiryMinutes { get; init; } = 15;
 
     /// <summary>
     /// Gets the refresh token lifetime in days.
     /// </summary>
     [Range(1, 30)]
-    public int RefreshTokenExpirationDays { get; init; } = 7;
+    public int RefreshTokenExpiryDays { get; init; } = 7;
 }

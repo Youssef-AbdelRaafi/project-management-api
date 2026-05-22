@@ -41,7 +41,7 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes),
+            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes),
             signingCredentials: signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -50,7 +50,7 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
     /// <inheritdoc />
     public DateTimeOffset GetAccessTokenExpiration(DateTimeOffset utcNow)
     {
-        return utcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
+        return utcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes);
     }
 
     /// <inheritdoc />
@@ -63,7 +63,7 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
     /// <inheritdoc />
     public DateTimeOffset GetRefreshTokenExpiration(DateTimeOffset utcNow)
     {
-        return utcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
+        return utcNow.AddDays(_jwtSettings.RefreshTokenExpiryDays);
     }
 
     /// <inheritdoc />
