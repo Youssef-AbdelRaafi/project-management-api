@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
         services.AddEndpointsApiExplorer();
         services.AddProblemDetails();
         services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddHealthChecks();
         services.AddCorsPolicy();
         services.AddJwtBearerAuthentication(configuration);
         services.AddApiVersioningSupport();

@@ -10,6 +10,9 @@ namespace ProjectManagement.API.Extensions;
 /// </summary>
 public static class WebApplicationExtensions
 {
+    private const int MigrationRetryCount = 5;
+    private static readonly TimeSpan MigrationRetryDelay = TimeSpan.FromSeconds(5);
+
     /// <summary>
     /// Configures middleware for exception handling, Swagger, CORS, authentication, and controllers.
     /// </summary>
@@ -48,6 +51,7 @@ public static class WebApplicationExtensions
         app.UseCors(ServiceCollectionExtensions.CorsPolicyName);
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapHealthChecks("/health");
         app.MapControllers();
 
         return app;
@@ -65,16 +69,38 @@ public static class WebApplicationExtensions
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        try
+        var cancellationToken = app.Lifetime.ApplicationStopping;
+
+        for (var attempt = 1; attempt <= MigrationRetryCount; attempt++)
         {
-            logger.LogInformation("Applying database migrations");
-            await dbContext.Database.MigrateAsync();
-            logger.LogInformation("Database migrations applied successfully");
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, "Database migration failed");
-            throw;
+            try
+            {
+                logger.LogInformation(
+                    "Applying database migrations. Attempt {Attempt}/{RetryCount}",
+                    attempt,
+                    MigrationRetryCount);
+
+                await dbContext.Database.MigrateAsync(cancellationToken);
+                logger.LogInformation("Database migrations applied successfully");
+
+                return;
+            }
+            catch (Exception exception) when (attempt < MigrationRetryCount)
+            {
+                logger.LogWarning(
+                    exception,
+                    "Database migration attempt {Attempt}/{RetryCount} failed. Retrying in {DelaySeconds} seconds",
+                    attempt,
+                    MigrationRetryCount,
+                    MigrationRetryDelay.TotalSeconds);
+
+                await Task.Delay(MigrationRetryDelay, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "Database migration failed");
+                throw;
+            }
         }
     }
 }
