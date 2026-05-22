@@ -15,10 +15,24 @@ public interface IJwtService
     string GenerateAccessToken(ApplicationUser user);
 
     /// <summary>
+    /// Calculates when a newly issued access token expires.
+    /// </summary>
+    /// <param name="utcNow">The current UTC timestamp.</param>
+    /// <returns>The access token expiration timestamp.</returns>
+    DateTimeOffset GetAccessTokenExpiration(DateTimeOffset utcNow);
+
+    /// <summary>
     /// Generates a cryptographically strong refresh token.
     /// </summary>
     /// <returns>The raw refresh token returned to the client once.</returns>
     string GenerateRefreshToken();
+
+    /// <summary>
+    /// Calculates when a newly issued refresh token expires.
+    /// </summary>
+    /// <param name="utcNow">The current UTC timestamp.</param>
+    /// <returns>The refresh token expiration timestamp.</returns>
+    DateTimeOffset GetRefreshTokenExpiration(DateTimeOffset utcNow);
 
     /// <summary>
     /// Hashes a raw refresh token before it is persisted.

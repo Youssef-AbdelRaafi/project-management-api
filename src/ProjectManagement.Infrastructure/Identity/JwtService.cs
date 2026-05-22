@@ -48,10 +48,22 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
     }
 
     /// <inheritdoc />
+    public DateTimeOffset GetAccessTokenExpiration(DateTimeOffset utcNow)
+    {
+        return utcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
+    }
+
+    /// <inheritdoc />
     public string GenerateRefreshToken()
     {
         var randomBytes = RandomNumberGenerator.GetBytes(RefreshTokenByteLength);
         return Convert.ToBase64String(randomBytes);
+    }
+
+    /// <inheritdoc />
+    public DateTimeOffset GetRefreshTokenExpiration(DateTimeOffset utcNow)
+    {
+        return utcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
     }
 
     /// <inheritdoc />
