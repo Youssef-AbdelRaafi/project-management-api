@@ -21,6 +21,13 @@ public interface IJwtService
     string GenerateRefreshToken();
 
     /// <summary>
+    /// Hashes a raw refresh token before it is persisted.
+    /// </summary>
+    /// <param name="refreshToken">The raw refresh token.</param>
+    /// <returns>The hashed refresh token.</returns>
+    string HashRefreshToken(string refreshToken);
+
+    /// <summary>
     /// Validates a raw refresh token against a stored token record.
     /// </summary>
     /// <param name="refreshToken">The raw refresh token supplied by the client.</param>
