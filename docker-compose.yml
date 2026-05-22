@@ -1,0 +1,49 @@
+name: project-management
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: project-management-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:-ProjectManagement_2026!}
+      MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:-ProjectManagement_2026!}
+      MSSQL_PID: Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "(/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -C -Q \"SELECT 1\" || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -Q \"SELECT 1\")"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: src/ProjectManagement.API/Dockerfile
+    container_name: project-management-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=ProjectManagementDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD:-ProjectManagement_2026!};TrustServerCertificate=True;MultipleActiveResultSets=true
+      JwtSettings__Secret: ${JWT_SECRET:-DockerDevelopmentJwtSecretKeyThatIsAtLeast32Bytes!}
+      JwtSettings__Issuer: ProjectManagement.API
+      JwtSettings__Audience: ProjectManagement.API
+      JwtSettings__AccessTokenExpiryMinutes: 15
+      JwtSettings__RefreshTokenExpiryDays: 7
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
