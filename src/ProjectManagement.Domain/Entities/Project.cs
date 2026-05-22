@@ -65,13 +65,23 @@ public sealed class Project : AuditableEntity
     /// </summary>
     /// <param name="name">The project name.</param>
     /// <param name="description">The project description.</param>
-    public void UpdateDetails(string name, string? description)
+    public void Update(string name, string? description)
     {
         ValidateName(name);
         ValidateDescription(description);
 
         Name = name.Trim();
         Description = NormalizeOptionalText(description);
+    }
+
+    /// <summary>
+    /// Updates the project's editable details.
+    /// </summary>
+    /// <param name="name">The project name.</param>
+    /// <param name="description">The project description.</param>
+    public void UpdateDetails(string name, string? description)
+    {
+        Update(name, description);
     }
 
     private static void ValidateName(string name)
