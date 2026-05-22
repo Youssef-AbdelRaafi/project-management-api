@@ -1,12 +1,14 @@
 {
   "info": {
+    "_postman_id": "8f3d8d0d-42df-4d2f-b2af-9a8237fc7d4d",
     "name": "Project Management API",
+    "description": "Postman collection for the Project Management API. Run Auth/Login first to auto-fill accessToken and refreshToken.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080/api/v1"
+      "value": "http://localhost:8080"
     },
     {
       "key": "accessToken",
@@ -15,6 +17,14 @@
     {
       "key": "refreshToken",
       "value": ""
+    },
+    {
+      "key": "projectId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "taskId",
+      "value": "00000000-0000-0000-0000-000000000000"
     }
   ],
   "item": [
@@ -23,72 +33,569 @@
       "item": [
         {
           "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register returns a token pair\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.accessToken).to.exist;",
+                  "    pm.expect(json.data.refreshToken).to.exist;",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.accessToken) {",
+                  "    pm.environment.set(\"accessToken\", json.data.accessToken);",
+                  "}",
+                  "if (json.data && json.data.refreshToken) {",
+                  "    pm.environment.set(\"refreshToken\", json.data.refreshToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/auth/register",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password1\",\n  \"fullName\": \"Demo User\"\n}"
+              "raw": "{\n  \"email\": \"demo.user@example.com\",\n  \"password\": \"Password1\",\n  \"fullName\": \"Demo User\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login returns a token pair\", function () {",
+                  "    pm.expect(pm.response.code).to.eql(200);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.accessToken).to.exist;",
+                  "    pm.expect(json.data.refreshToken).to.exist;",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.environment.set(\"accessToken\", json.data.accessToken);",
+                  "pm.environment.set(\"refreshToken\", json.data.refreshToken);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/auth/login",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password1\"\n}"
+              "raw": "{\n  \"email\": \"demo.user@example.com\",\n  \"password\": \"Password1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Refresh Token",
+          "name": "Refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Refresh rotates token pair\", function () {",
+                  "    pm.expect(pm.response.code).to.eql(200);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.accessToken).to.exist;",
+                  "    pm.expect(json.data.refreshToken).to.exist;",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.accessToken) {",
+                  "    pm.environment.set(\"accessToken\", json.data.accessToken);",
+                  "}",
+                  "if (json.data && json.data.refreshToken) {",
+                  "    pm.environment.set(\"refreshToken\", json.data.refreshToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/auth/refresh",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
     {
-      "name": "Admin",
+      "name": "Projects",
       "item": [
         {
-          "name": "Get Users",
+          "name": "Create",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Project created\", function () {",
+                  "    pm.expect(pm.response.code).to.eql(201);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.id).to.exist;",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.id) {",
+                  "    pm.environment.set(\"projectId\", json.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Technical Assessment\",\n  \"description\": \"Backend .NET clean architecture project\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetAll",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/admin/users"
-          }
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects?pageNumber=1&pageSize=10&search=&sortBy=createdAt&sortDescending=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects"
+              ],
+              "query": [
+                {
+                  "key": "pageNumber",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortDescending",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetById",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Technical Assessment API\",\n  \"description\": \"Updated project description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Task created\", function () {",
+                  "    pm.expect(pm.response.code).to.eql(201);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.id).to.exist;",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.id) {",
+                  "    pm.environment.set(\"taskId\", json.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Prepare submission\",\n  \"description\": \"Review README, migrations, tests, Docker, and Swagger\",\n  \"dueDate\": \"2026-05-29T12:00:00Z\",\n  \"priority\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/{{projectId}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "{{projectId}}",
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetByProject",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/{{projectId}}/tasks?status=Todo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "{{projectId}}",
+                "tasks"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "Todo"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateStatus",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tasks/{{taskId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                "{{taskId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tasks/{{taskId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                "{{taskId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }

@@ -294,7 +294,7 @@ curl -X POST http://localhost:8080/api/v1/projects/<project-id>/tasks \
     "title": "Prepare submission",
     "description": "Review README, migrations, tests, Docker, and Swagger",
     "dueDate": "2026-05-29T12:00:00Z",
-    "priority": "High"
+    "priority": 3
   }'
 ```
 
