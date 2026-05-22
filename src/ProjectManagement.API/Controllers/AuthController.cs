@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Application.Common.Models;
@@ -13,7 +14,8 @@ namespace ProjectManagement.API.Controllers;
 /// Authentication endpoints for registration, login, and refresh-token rotation.
 /// </summary>
 [ApiController]
-[Route("api/auth")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public sealed class AuthController(ISender sender) : ControllerBase
 {
     /// <summary>

@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,8 @@ namespace ProjectManagement.API.Controllers;
 /// Administrative endpoints demonstrating role-based authorization.
 /// </summary>
 [ApiController]
-[Route("api/admin")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Authorize(Roles = Roles.Admin)]
 public sealed class AdminController(UserManager<ApplicationUser> userManager) : ControllerBase
 {
