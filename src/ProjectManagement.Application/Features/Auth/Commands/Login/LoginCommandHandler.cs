@@ -2,7 +2,7 @@ using MediatR;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Auth.DTOs;
-using ProjectManagement.Domain.Entities;
+using DomainRefreshToken = ProjectManagement.Domain.Entities.RefreshToken;
 
 namespace ProjectManagement.Application.Features.Auth.Commands.Login;
 
@@ -40,7 +40,7 @@ public sealed class LoginCommandHandler(
         var refreshTokenHash = jwtService.HashRefreshToken(refreshToken);
         var refreshTokenExpiresAt = jwtService.GetRefreshTokenExpiration(utcNow);
 
-        dbContext.RefreshTokens.Add(RefreshToken.Create(refreshTokenHash, refreshTokenExpiresAt, user.Id, null));
+        dbContext.RefreshTokens.Add(DomainRefreshToken.Create(refreshTokenHash, refreshTokenExpiresAt, user.Id, null));
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result<AuthResponseDto>.Success(
