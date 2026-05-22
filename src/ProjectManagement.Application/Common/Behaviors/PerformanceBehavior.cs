@@ -1,15 +1,10 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Application.Common.Interfaces;
 
 namespace ProjectManagement.Application.Common.Behaviors;
 
-/// <summary>
-/// Logs application requests that exceed the expected execution threshold.
-/// </summary>
-/// <typeparam name="TRequest">The request type.</typeparam>
-/// <typeparam name="TResponse">The response type.</typeparam>
 public sealed class PerformanceBehavior<TRequest, TResponse>(
     ILogger<TRequest> logger,
     ICurrentUserService currentUser)
@@ -18,7 +13,6 @@ public sealed class PerformanceBehavior<TRequest, TResponse>(
 {
     private const int ThresholdMilliseconds = 500;
 
-    /// <inheritdoc />
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,

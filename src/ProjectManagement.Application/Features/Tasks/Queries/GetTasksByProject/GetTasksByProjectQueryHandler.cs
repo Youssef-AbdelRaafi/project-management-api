@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +10,12 @@ using DomainProject = ProjectManagement.Domain.Entities.Project;
 
 namespace ProjectManagement.Application.Features.Tasks.Queries.GetTasksByProject;
 
-/// <summary>
-/// Handles task list queries after validating project ownership.
-/// </summary>
 public sealed class GetTasksByProjectQueryHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<GetTasksByProjectQuery, Result<IReadOnlyCollection<TaskDto>>>
 {
-    /// <inheritdoc />
     public async Task<Result<IReadOnlyCollection<TaskDto>>> Handle(
         GetTasksByProjectQuery request,
         CancellationToken cancellationToken)

@@ -1,16 +1,12 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configures persistence rules for refresh tokens.
-/// </summary>
 public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
-    /// <inheritdoc />
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
         builder.ToTable("RefreshTokens");

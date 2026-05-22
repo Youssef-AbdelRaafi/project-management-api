@@ -1,16 +1,10 @@
-using FluentValidation;
+﻿using FluentValidation;
 using ProjectManagement.Domain.Common;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands.CreateTask;
 
-/// <summary>
-/// Validates task creation requests.
-/// </summary>
 public sealed class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CreateTaskCommandValidator" /> class.
-    /// </summary>
     public CreateTaskCommandValidator()
     {
         RuleFor(command => command.ProjectId)

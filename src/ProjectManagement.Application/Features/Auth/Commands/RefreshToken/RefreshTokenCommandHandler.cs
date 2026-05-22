@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
@@ -7,9 +7,6 @@ using DomainRefreshToken = ProjectManagement.Domain.Entities.RefreshToken;
 
 namespace ProjectManagement.Application.Features.Auth.Commands.RefreshToken;
 
-/// <summary>
-/// Handles refresh token rotation.
-/// </summary>
 public sealed class RefreshTokenCommandHandler(
     IApplicationDbContext dbContext,
     IIdentityService identityService,
@@ -19,7 +16,6 @@ public sealed class RefreshTokenCommandHandler(
     private const string InvalidRefreshTokenMessage = "Invalid refresh token.";
     private const string RotationReason = "Rotated by refresh token flow.";
 
-    /// <inheritdoc />
     public async Task<Result<AuthResponseDto>> Handle(
         RefreshTokenCommand request,
         CancellationToken cancellationToken)

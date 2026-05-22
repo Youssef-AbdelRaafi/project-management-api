@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Domain.Constants;
@@ -6,14 +6,10 @@ using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Identity;
 
-/// <summary>
-/// Wraps ASP.NET Core Identity operations behind application-level contracts.
-/// </summary>
 public sealed class IdentityService(UserManager<ApplicationUser> userManager) : IIdentityService
 {
     private const string InvalidCredentialsMessage = "Invalid email or password.";
 
-    /// <inheritdoc />
     public async Task<Result<ApplicationUser>> RegisterAsync(
         string email,
         string password,
@@ -44,7 +40,6 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
         return Result<ApplicationUser>.Success(user, StatusCodes.Created);
     }
 
-    /// <inheritdoc />
     public async Task<Result<ApplicationUser>> LoginAsync(
         string email,
         string password,
@@ -62,14 +57,12 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
         return Result<ApplicationUser>.Success(user);
     }
 
-    /// <inheritdoc />
     public async Task<ApplicationUser?> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await userManager.FindByIdAsync(userId);
     }
 
-    /// <inheritdoc />
     public async Task<IReadOnlyCollection<string>> GetUserRolesAsync(
         ApplicationUser user,
         CancellationToken cancellationToken)

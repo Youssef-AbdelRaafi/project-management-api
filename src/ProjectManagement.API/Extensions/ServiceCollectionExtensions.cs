@@ -1,33 +1,21 @@
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagement.API.Middleware;
-using ProjectManagement.API.Swagger;
+using ProjectManagement.API.OpenApi;
 using ProjectManagement.Infrastructure.Identity;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ProjectManagement.API.Extensions;
 
-/// <summary>
-/// Registers API-layer services.
-/// </summary>
 public static class ServiceCollectionExtensions
 {
-    /// <summary>
-    /// Default CORS policy name used by the API pipeline.
-    /// </summary>
     public const string CorsPolicyName = "DefaultCorsPolicy";
 
     private const int MinimumJwtSecretBytes = 32;
 
-    /// <summary>
-    /// Adds API controllers, exception handling, CORS, Swagger, and JWT bearer authentication.
-    /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The application configuration.</param>
-    /// <returns>The same service collection for chaining.</returns>
     public static IServiceCollection AddApiServices(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -134,7 +122,7 @@ public static class ServiceCollectionExtensions
 
         if (string.IsNullOrWhiteSpace(jwtSettings.Secret))
         {
-            throw new InvalidOperationException("JWT secret is not configured. Set Jwt__Secret as an environment variable.");
+            throw new InvalidOperationException("JWT secret is not configured. Set JwtSettings__Secret as an environment variable.");
         }
 
         if (Encoding.UTF8.GetByteCount(jwtSettings.Secret) < MinimumJwtSecretBytes)

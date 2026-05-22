@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
@@ -7,22 +7,15 @@ using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Persistence;
 
-/// <summary>
-/// EF Core database context for the application.
-/// </summary>
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
-    /// <inheritdoc />
     public DbSet<Project> Projects => Set<Project>();
 
-    /// <inheritdoc />
     public DbSet<TaskItem> TaskItems => Set<TaskItem>();
 
-    /// <inheritdoc />
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
-    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

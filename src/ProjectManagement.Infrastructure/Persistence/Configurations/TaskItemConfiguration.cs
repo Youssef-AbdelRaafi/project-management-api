@@ -1,16 +1,12 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configures persistence rules for task items.
-/// </summary>
 public sealed class TaskItemConfiguration : IEntityTypeConfiguration<TaskItem>
 {
-    /// <inheritdoc />
     public void Configure(EntityTypeBuilder<TaskItem> builder)
     {
         builder.ToTable("TaskItems");

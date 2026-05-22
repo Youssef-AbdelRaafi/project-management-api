@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Auth.DTOs;
@@ -6,16 +6,12 @@ using DomainRefreshToken = ProjectManagement.Domain.Entities.RefreshToken;
 
 namespace ProjectManagement.Application.Features.Auth.Commands.Login;
 
-/// <summary>
-/// Handles user login and token issuance.
-/// </summary>
 public sealed class LoginCommandHandler(
     IIdentityService identityService,
     IJwtService jwtService,
     IApplicationDbContext dbContext)
     : IRequestHandler<LoginCommand, Result<AuthResponseDto>>
 {
-    /// <inheritdoc />
     public async Task<Result<AuthResponseDto>> Handle(
         LoginCommand request,
         CancellationToken cancellationToken)

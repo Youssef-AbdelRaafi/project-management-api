@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
@@ -9,16 +9,12 @@ using DomainProject = ProjectManagement.Domain.Entities.Project;
 
 namespace ProjectManagement.Application.Features.Projects.Commands.UpdateProject;
 
-/// <summary>
-/// Handles project updates for the authenticated owner.
-/// </summary>
 public sealed class UpdateProjectCommandHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<UpdateProjectCommand, Result<ProjectDto>>
 {
-    /// <inheritdoc />
     public async Task<Result<ProjectDto>> Handle(
         UpdateProjectCommand request,
         CancellationToken cancellationToken)

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using ProjectManagement.Application.Common.Interfaces;
@@ -6,12 +6,8 @@ using ProjectManagement.Domain.Common;
 
 namespace ProjectManagement.Infrastructure.Persistence.Interceptors;
 
-/// <summary>
-/// Populates audit fields before EF Core persists changes.
-/// </summary>
 public sealed class AuditableEntityInterceptor(ICurrentUserService currentUserService) : SaveChangesInterceptor
 {
-    /// <inheritdoc />
     public override InterceptionResult<int> SavingChanges(
         DbContextEventData eventData,
         InterceptionResult<int> result)
@@ -20,7 +16,6 @@ public sealed class AuditableEntityInterceptor(ICurrentUserService currentUserSe
         return base.SavingChanges(eventData, result);
     }
 
-    /// <inheritdoc />
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,

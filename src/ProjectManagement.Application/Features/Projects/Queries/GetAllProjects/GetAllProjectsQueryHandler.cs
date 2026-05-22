@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +10,12 @@ using DomainProject = ProjectManagement.Domain.Entities.Project;
 
 namespace ProjectManagement.Application.Features.Projects.Queries.GetAllProjects;
 
-/// <summary>
-/// Handles paginated project list queries for the authenticated user.
-/// </summary>
 public sealed class GetAllProjectsQueryHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<GetAllProjectsQuery, Result<PaginatedList<ProjectDto>>>
 {
-    /// <inheritdoc />
     public async Task<Result<PaginatedList<ProjectDto>>> Handle(
         GetAllProjectsQuery request,
         CancellationToken cancellationToken)

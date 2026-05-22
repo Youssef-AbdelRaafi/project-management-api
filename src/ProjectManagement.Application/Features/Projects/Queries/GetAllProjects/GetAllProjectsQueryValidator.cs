@@ -1,18 +1,12 @@
-using FluentValidation;
+﻿using FluentValidation;
 using ProjectManagement.Application.Common.Models;
 
 namespace ProjectManagement.Application.Features.Projects.Queries.GetAllProjects;
 
-/// <summary>
-/// Validates project list query parameters.
-/// </summary>
 public sealed class GetAllProjectsQueryValidator : AbstractValidator<GetAllProjectsQuery>
 {
     private static readonly string[] SupportedSortFields = ["CreatedAt", "Name"];
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GetAllProjectsQueryValidator" /> class.
-    /// </summary>
     public GetAllProjectsQueryValidator()
     {
         RuleFor(query => query.PageNumber)

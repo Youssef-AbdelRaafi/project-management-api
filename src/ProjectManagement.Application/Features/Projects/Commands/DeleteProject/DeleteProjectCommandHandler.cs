@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
@@ -7,15 +7,11 @@ using DomainProject = ProjectManagement.Domain.Entities.Project;
 
 namespace ProjectManagement.Application.Features.Projects.Commands.DeleteProject;
 
-/// <summary>
-/// Handles project deletion for the authenticated owner.
-/// </summary>
 public sealed class DeleteProjectCommandHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser)
     : IRequestHandler<DeleteProjectCommand, Result>
 {
-    /// <inheritdoc />
     public async Task<Result> Handle(
         DeleteProjectCommand request,
         CancellationToken cancellationToken)

@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,16 +9,12 @@ using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Identity;
 
-/// <summary>
-/// Issues JWT access tokens and manages refresh-token primitives.
-/// </summary>
 public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
 {
     private const int RefreshTokenByteLength = 64;
 
     private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
-    /// <inheritdoc />
     public string GenerateAccessToken(ApplicationUser user, IReadOnlyCollection<string> roles)
     {
         ArgumentNullException.ThrowIfNull(user);
@@ -50,26 +46,22 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    /// <inheritdoc />
     public DateTimeOffset GetAccessTokenExpiration(DateTimeOffset utcNow)
     {
         return utcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes);
     }
 
-    /// <inheritdoc />
     public string GenerateRefreshToken()
     {
         var randomBytes = RandomNumberGenerator.GetBytes(RefreshTokenByteLength);
         return Convert.ToBase64String(randomBytes);
     }
 
-    /// <inheritdoc />
     public DateTimeOffset GetRefreshTokenExpiration(DateTimeOffset utcNow)
     {
         return utcNow.AddDays(_jwtSettings.RefreshTokenExpiryDays);
     }
 
-    /// <inheritdoc />
     public string HashRefreshToken(string refreshToken)
     {
         if (string.IsNullOrWhiteSpace(refreshToken))
@@ -83,7 +75,6 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
         return Convert.ToBase64String(hashBytes);
     }
 
-    /// <inheritdoc />
     public bool ValidateRefreshToken(string refreshToken, RefreshToken storedRefreshToken, DateTimeOffset utcNow)
     {
         ArgumentNullException.ThrowIfNull(storedRefreshToken);

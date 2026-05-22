@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Domain.Exceptions;
@@ -6,14 +6,10 @@ using ResultStatusCodes = ProjectManagement.Application.Common.Models.StatusCode
 
 namespace ProjectManagement.API.Middleware;
 
-/// <summary>
-/// Converts unhandled exceptions into the API's standard result response shape.
-/// </summary>
 public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
     private const string UnexpectedErrorMessage = "An unexpected error occurred.";
 
-    /// <inheritdoc />
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,

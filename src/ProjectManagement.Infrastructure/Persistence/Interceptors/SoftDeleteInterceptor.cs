@@ -1,15 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using ProjectManagement.Domain.Common;
 
 namespace ProjectManagement.Infrastructure.Persistence.Interceptors;
 
-/// <summary>
-/// Converts EF Core delete operations into soft-delete updates.
-/// </summary>
 public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
 {
-    /// <inheritdoc />
     public override InterceptionResult<int> SavingChanges(
         DbContextEventData eventData,
         InterceptionResult<int> result)
@@ -18,7 +14,6 @@ public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
         return base.SavingChanges(eventData, result);
     }
 
-    /// <inheritdoc />
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,

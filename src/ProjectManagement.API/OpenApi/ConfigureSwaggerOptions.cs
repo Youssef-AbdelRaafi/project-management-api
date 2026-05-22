@@ -1,19 +1,15 @@
-using Asp.Versioning.ApiExplorer;
+﻿using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace ProjectManagement.API.Swagger;
+namespace ProjectManagement.API.OpenApi;
 
-/// <summary>
-/// Configures Swagger documents for all discovered API versions.
-/// </summary>
 public sealed class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider)
     : IConfigureOptions<SwaggerGenOptions>
 {
     private const string BearerSchemeName = "Bearer";
 
-    /// <inheritdoc />
     public void Configure(SwaggerGenOptions options)
     {
         foreach (var description in provider.ApiVersionDescriptions)

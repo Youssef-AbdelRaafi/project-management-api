@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
@@ -8,16 +8,12 @@ using ProjectManagement.Domain.Exceptions;
 
 namespace ProjectManagement.Application.Features.Projects.Commands.CreateProject;
 
-/// <summary>
-/// Handles project creation for the authenticated user.
-/// </summary>
 public sealed class CreateProjectCommandHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<CreateProjectCommand, Result<ProjectDto>>
 {
-    /// <inheritdoc />
     public async Task<Result<ProjectDto>> Handle(
         CreateProjectCommand request,
         CancellationToken cancellationToken)

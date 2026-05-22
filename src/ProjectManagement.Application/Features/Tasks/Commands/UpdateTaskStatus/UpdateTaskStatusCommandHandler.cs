@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
@@ -9,16 +9,12 @@ using DomainTaskItem = ProjectManagement.Domain.Entities.TaskItem;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands.UpdateTaskStatus;
 
-/// <summary>
-/// Handles task status updates after validating project ownership.
-/// </summary>
 public sealed class UpdateTaskStatusCommandHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<UpdateTaskStatusCommand, Result<TaskDto>>
 {
-    /// <inheritdoc />
     public async Task<Result<TaskDto>> Handle(
         UpdateTaskStatusCommand request,
         CancellationToken cancellationToken)

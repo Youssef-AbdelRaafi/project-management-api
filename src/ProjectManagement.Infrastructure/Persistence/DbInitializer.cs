@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,16 +8,8 @@ using ProjectManagement.Infrastructure.Identity;
 
 namespace ProjectManagement.Infrastructure.Persistence;
 
-/// <summary>
-/// Seeds required identity data.
-/// </summary>
 public static class DbInitializer
 {
-    /// <summary>
-    /// Seeds application roles and optionally a default administrator user.
-    /// </summary>
-    /// <param name="serviceProvider">The root service provider.</param>
-    /// <returns>A task representing the asynchronous seed operation.</returns>
     public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();

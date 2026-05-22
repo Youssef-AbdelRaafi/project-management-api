@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
@@ -10,16 +10,12 @@ using DomainProject = ProjectManagement.Domain.Entities.Project;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands.CreateTask;
 
-/// <summary>
-/// Handles task creation after validating project ownership.
-/// </summary>
 public sealed class CreateTaskCommandHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<CreateTaskCommand, Result<TaskDto>>
 {
-    /// <inheritdoc />
     public async Task<Result<TaskDto>> Handle(
         CreateTaskCommand request,
         CancellationToken cancellationToken)

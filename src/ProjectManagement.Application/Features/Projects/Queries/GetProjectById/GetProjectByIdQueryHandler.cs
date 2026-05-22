@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
@@ -9,16 +9,12 @@ using DomainProject = ProjectManagement.Domain.Entities.Project;
 
 namespace ProjectManagement.Application.Features.Projects.Queries.GetProjectById;
 
-/// <summary>
-/// Handles project details queries.
-/// </summary>
 public sealed class GetProjectByIdQueryHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<GetProjectByIdQuery, Result<ProjectDetailsDto>>
 {
-    /// <inheritdoc />
     public async Task<Result<ProjectDetailsDto>> Handle(
         GetProjectByIdQuery request,
         CancellationToken cancellationToken)

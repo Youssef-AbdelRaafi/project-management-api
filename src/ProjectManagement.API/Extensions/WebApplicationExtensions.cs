@@ -1,23 +1,15 @@
-using Asp.Versioning.ApiExplorer;
+﻿using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Infrastructure.Persistence;
 using Serilog;
 
 namespace ProjectManagement.API.Extensions;
 
-/// <summary>
-/// Configures the API request pipeline and startup database tasks.
-/// </summary>
 public static class WebApplicationExtensions
 {
     private const int MigrationRetryCount = 5;
     private static readonly TimeSpan MigrationRetryDelay = TimeSpan.FromSeconds(5);
 
-    /// <summary>
-    /// Configures middleware for exception handling, Swagger, CORS, authentication, and controllers.
-    /// </summary>
-    /// <param name="app">The web application.</param>
-    /// <returns>The same web application for chaining.</returns>
     public static WebApplication UseApiPipeline(this WebApplication app)
     {
         app.UseExceptionHandler();
@@ -57,11 +49,6 @@ public static class WebApplicationExtensions
         return app;
     }
 
-    /// <summary>
-    /// Applies pending EF Core migrations at application startup.
-    /// </summary>
-    /// <param name="app">The web application.</param>
-    /// <returns>A task representing the asynchronous migration operation.</returns>
     public static async Task ApplyMigrationsAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();

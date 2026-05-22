@@ -6,8 +6,8 @@ services:
     container_name: project-management-sqlserver
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:-ProjectManagement_2026!}
-      MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:-ProjectManagement_2026!}
+      SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?Set SQLSERVER_SA_PASSWORD in .env}
+      MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?Set SQLSERVER_SA_PASSWORD in .env}
       MSSQL_PID: Developer
     ports:
       - "1433:1433"
@@ -35,8 +35,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=ProjectManagementDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD:-ProjectManagement_2026!};TrustServerCertificate=True;MultipleActiveResultSets=true
-      JwtSettings__Secret: ${JWT_SECRET:-DockerDevelopmentJwtSecretKeyThatIsAtLeast32Bytes!}
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=ProjectManagementDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD:?Set SQLSERVER_SA_PASSWORD in .env};TrustServerCertificate=True;MultipleActiveResultSets=true
+      JwtSettings__Secret: ${JWT_SECRET:?Set JWT_SECRET in .env}
       JwtSettings__Issuer: ProjectManagement.API
       JwtSettings__Audience: ProjectManagement.API
       JwtSettings__AccessTokenExpiryMinutes: 15

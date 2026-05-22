@@ -1,16 +1,12 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Common;
 using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configures persistence rules for projects.
-/// </summary>
 public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
-    /// <inheritdoc />
     public void Configure(EntityTypeBuilder<Project> builder)
     {
         builder.ToTable("Projects");

@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
@@ -7,15 +7,11 @@ using DomainTaskItem = ProjectManagement.Domain.Entities.TaskItem;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands.DeleteTask;
 
-/// <summary>
-/// Handles task deletion after validating project ownership.
-/// </summary>
 public sealed class DeleteTaskCommandHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser)
     : IRequestHandler<DeleteTaskCommand, Result>
 {
-    /// <inheritdoc />
     public async Task<Result> Handle(
         DeleteTaskCommand request,
         CancellationToken cancellationToken)
