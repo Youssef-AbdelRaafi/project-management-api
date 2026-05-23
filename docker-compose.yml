@@ -6,7 +6,6 @@ services:
     container_name: project-management-sqlserver
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?Set SQLSERVER_SA_PASSWORD in .env}
       MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?Set SQLSERVER_SA_PASSWORD in .env}
       MSSQL_PID: Developer
     ports:
