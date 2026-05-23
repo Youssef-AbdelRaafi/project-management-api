@@ -137,11 +137,6 @@ http://localhost:5115/swagger
 
 Create a local `.env` file from the template, set strong local secrets, then run the stack:
 
-```powershell
-copy .env.example .env
-docker compose up --build
-```
-
 ```bash
 cp .env.example .env
 docker compose up --build
@@ -285,7 +280,18 @@ curl -X POST http://localhost:8080/api/v1/auth/login \
 
 Copy `data.accessToken` from the response.
 
-### 3. Create Project
+### 3. Logout
+
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/logout \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <access-token>" \
+  -d '{
+    "refreshToken": "<refresh-token>"
+  }'
+```
+
+### 4. Create Project
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/projects \
@@ -299,7 +305,7 @@ curl -X POST http://localhost:8080/api/v1/projects \
 
 Copy `data.id` from the response.
 
-### 4. Create Task
+### 5. Create Task
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/projects/<project-id>/tasks \
