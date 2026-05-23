@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Common.Interfaces;
 using ProjectManagement.Application.Common.Models;
 using ProjectManagement.Application.Features.Auth.DTOs;
@@ -31,13 +32,22 @@ public sealed class LoginCommandHandler(
         var user = loginResult.Data;
         var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
         var utcNow = DateTimeOffset.UtcNow;
-        var accessToken = jwtService.GenerateAccessToken(user, roles);
+        var accessToken = jwtService.GenerateAccessToken(user, roles, utcNow);
         var accessTokenExpiresAt = jwtService.GetAccessTokenExpiration(utcNow);
         var refreshToken = jwtService.GenerateRefreshToken();
         var refreshTokenHash = jwtService.HashRefreshToken(refreshToken);
         var refreshTokenExpiresAt = jwtService.GetRefreshTokenExpiration(utcNow);
 
-        dbContext.RefreshTokens.Add(DomainRefreshToken.Create(refreshTokenHash, refreshTokenExpiresAt, user.Id, null));
+        var activeTokens = await dbContext.RefreshTokens
+            .Where(t => t.UserId == user.Id && t.RevokedAt == null)
+            .ToListAsync(cancellationToken);
+
+        foreach (var token in activeTokens)
+        {
+            token.Revoke(utcNow, null, null, "Revoked due to new login");
+        }
+
+        dbContext.RefreshTokens.Add(DomainRefreshToken.Create(refreshTokenHash, refreshTokenExpiresAt, user.Id, null, utcNow));
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result<AuthResponseDto>.Success(

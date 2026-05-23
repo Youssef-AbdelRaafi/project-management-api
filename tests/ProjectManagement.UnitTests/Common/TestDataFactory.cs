@@ -40,7 +40,7 @@ public static class TestDataFactory
         var task = TaskItem.Create(
             title,
             "Task description",
-            DateTime.UtcNow.AddDays(3),
+            DateTimeOffset.UtcNow.AddDays(3),
             TaskPriority.Medium,
             projectId);
 

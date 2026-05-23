@@ -5,7 +5,7 @@ namespace ProjectManagement.Application.Common.Interfaces;
 
 public interface IJwtService
 {
-    string GenerateAccessToken(UserAccount user, IReadOnlyCollection<string> roles);
+    string GenerateAccessToken(UserAccount user, IReadOnlyCollection<string> roles, DateTimeOffset utcNow);
 
     DateTimeOffset GetAccessTokenExpiration(DateTimeOffset utcNow);
 

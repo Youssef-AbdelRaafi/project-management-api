@@ -13,7 +13,7 @@ public sealed class TaskItem : AuditableEntity
     private TaskItem(
         string title,
         string? description,
-        DateTime dueDate,
+        DateTimeOffset dueDate,
         TaskPriority priority,
         Guid projectId)
     {
@@ -31,7 +31,7 @@ public sealed class TaskItem : AuditableEntity
 
     public Enums.TaskStatus Status { get; private set; } = Enums.TaskStatus.Todo;
 
-    public DateTime DueDate { get; private set; }
+    public DateTimeOffset DueDate { get; private set; }
 
     public TaskPriority Priority { get; private set; } = TaskPriority.Medium;
 
@@ -42,7 +42,7 @@ public sealed class TaskItem : AuditableEntity
     public static TaskItem Create(
         string title,
         string? description,
-        DateTime dueDate,
+        DateTimeOffset dueDate,
         TaskPriority priority,
         Guid projectId)
     {

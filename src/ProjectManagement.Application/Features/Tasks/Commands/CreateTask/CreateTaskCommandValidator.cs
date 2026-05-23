@@ -18,7 +18,9 @@ public sealed class CreateTaskCommandValidator : AbstractValidator<CreateTaskCom
             .MaximumLength(DomainConstants.TaskItem.DescriptionMaxLength);
 
         RuleFor(command => command.DueDate)
-            .NotEmpty();
+            .NotEmpty()
+            .GreaterThan(DateTimeOffset.UtcNow)
+            .WithMessage("Due date must be in the future.");
 
         RuleFor(command => command.Priority)
             .IsInEnum();

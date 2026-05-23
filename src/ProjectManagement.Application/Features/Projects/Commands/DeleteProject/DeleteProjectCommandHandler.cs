@@ -24,6 +24,7 @@ public sealed class DeleteProjectCommandHandler(
         }
 
         var project = await dbContext.Projects
+            .Include(p => p.Tasks)
             .SingleOrDefaultAsync(project => project.Id == request.Id, cancellationToken);
 
         if (project is null)

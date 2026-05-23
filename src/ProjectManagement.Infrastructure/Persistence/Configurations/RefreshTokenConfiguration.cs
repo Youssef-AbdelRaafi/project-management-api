@@ -33,6 +33,9 @@ public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refresh
         builder.Property(refreshToken => refreshToken.RevokedReason)
             .HasMaxLength(DomainConstants.RefreshToken.RevokedReasonMaxLength);
 
+        builder.Property(refreshToken => refreshToken.RevokedAt)
+            .IsConcurrencyToken();
+
         builder.HasIndex(refreshToken => refreshToken.TokenHash)
             .IsUnique();
 

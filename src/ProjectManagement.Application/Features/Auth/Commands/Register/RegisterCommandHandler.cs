@@ -28,15 +28,15 @@ public sealed class RegisterCommandHandler(
         }
 
         var user = registrationResult.Data;
-        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
         var utcNow = DateTimeOffset.UtcNow;
-        var accessToken = jwtService.GenerateAccessToken(user, roles);
+        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
+        var accessToken = jwtService.GenerateAccessToken(user, roles, utcNow);
         var accessTokenExpiresAt = jwtService.GetAccessTokenExpiration(utcNow);
         var refreshToken = jwtService.GenerateRefreshToken();
         var refreshTokenHash = jwtService.HashRefreshToken(refreshToken);
         var refreshTokenExpiresAt = jwtService.GetRefreshTokenExpiration(utcNow);
 
-        dbContext.RefreshTokens.Add(DomainRefreshToken.Create(refreshTokenHash, refreshTokenExpiresAt, user.Id, null));
+        dbContext.RefreshTokens.Add(DomainRefreshToken.Create(refreshTokenHash, refreshTokenExpiresAt, user.Id, null, utcNow));
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result<AuthResponseDto>.Success(

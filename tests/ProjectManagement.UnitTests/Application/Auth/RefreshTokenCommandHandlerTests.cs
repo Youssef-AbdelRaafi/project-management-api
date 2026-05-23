@@ -22,8 +22,9 @@ public sealed class RefreshTokenCommandHandlerTests : TestBase
         var storedToken = DomainRefreshToken.Create(
             "hashed-current-refresh-token",
             DateTimeOffset.UtcNow.AddDays(1),
-            user.Id,
-            null);
+            TestDataFactory.UserId,
+            null,
+            DateTimeOffset.UtcNow);
 
         await AddAsync(storedToken);
 

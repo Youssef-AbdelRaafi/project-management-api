@@ -8,7 +8,7 @@ public sealed record TaskDto(
     string Title,
     string? Description,
     DomainTaskStatus Status,
-    DateTime DueDate,
+    DateTimeOffset DueDate,
     TaskPriority Priority,
     Guid ProjectId,
     DateTimeOffset CreatedAt);

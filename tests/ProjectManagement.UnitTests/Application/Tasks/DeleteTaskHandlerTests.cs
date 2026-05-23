@@ -29,8 +29,8 @@ public sealed class DeleteTaskHandlerTests : TestBase
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.StatusCode.Should().Be(AppStatusCodes.NoContent);
-        var taskExists = await DbContext.TaskItems.AnyAsync(entity => entity.Id == task.Id);
-        taskExists.Should().BeFalse();
+        var deletedTask = await DbContext.TaskItems.IgnoreQueryFilters().SingleAsync(entity => entity.Id == task.Id);
+        deletedTask.IsDeleted.Should().BeTrue();
     }
 
     [Fact]

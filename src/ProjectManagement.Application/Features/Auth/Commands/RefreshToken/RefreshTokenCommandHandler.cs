@@ -47,12 +47,13 @@ public sealed class RefreshTokenCommandHandler(
             newRefreshTokenHash,
             newRefreshTokenExpiresAt,
             user.Id,
-            null));
+            null,
+            utcNow));
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
         var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
-        var accessToken = jwtService.GenerateAccessToken(user, roles);
+        var accessToken = jwtService.GenerateAccessToken(user, roles, utcNow);
         var accessTokenExpiresAt = jwtService.GetAccessTokenExpiration(utcNow);
 
         return Result<AuthResponseDto>.Success(

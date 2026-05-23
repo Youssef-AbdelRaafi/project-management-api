@@ -9,5 +9,5 @@ public sealed record CreateTaskCommand(
     Guid ProjectId,
     string Title,
     string? Description,
-    DateTime DueDate,
+    DateTimeOffset DueDate,
     TaskPriority Priority) : IRequest<Result<TaskDto>>;

@@ -16,7 +16,7 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
 
     private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
-    public string GenerateAccessToken(UserAccount user, IReadOnlyCollection<string> roles)
+    public string GenerateAccessToken(UserAccount user, IReadOnlyCollection<string> roles, DateTimeOffset utcNow)
     {
         ArgumentNullException.ThrowIfNull(user);
         ArgumentNullException.ThrowIfNull(roles);
@@ -41,7 +41,7 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes),
+            expires: utcNow.UtcDateTime.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes),
             signingCredentials: signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -80,16 +80,6 @@ public sealed class JwtService(IOptions<JwtSettings> jwtOptions) : IJwtService
     {
         ArgumentNullException.ThrowIfNull(storedRefreshToken);
 
-        if (string.IsNullOrWhiteSpace(refreshToken) || !storedRefreshToken.IsActive(utcNow))
-        {
-            return false;
-        }
-
-        var computedHash = HashRefreshToken(refreshToken);
-        var computedHashBytes = Encoding.UTF8.GetBytes(computedHash);
-        var storedHashBytes = Encoding.UTF8.GetBytes(storedRefreshToken.TokenHash);
-
-        return computedHashBytes.Length == storedHashBytes.Length
-            && CryptographicOperations.FixedTimeEquals(computedHashBytes, storedHashBytes);
+        return !string.IsNullOrWhiteSpace(refreshToken) && storedRefreshToken.IsActive(utcNow);
     }
 }

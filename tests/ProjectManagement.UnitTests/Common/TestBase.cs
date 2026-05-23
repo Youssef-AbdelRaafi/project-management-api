@@ -13,9 +13,13 @@ public abstract class TestBase : IDisposable
 {
     protected TestBase()
     {
+        var auditableEntityInterceptor = new ProjectManagement.Infrastructure.Persistence.Interceptors.AuditableEntityInterceptor(CurrentUserServiceMock.Object);
+        var softDeleteInterceptor = new ProjectManagement.Infrastructure.Persistence.Interceptors.SoftDeleteInterceptor();
+
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase($"ProjectManagementTests-{Guid.NewGuid()}")
             .EnableSensitiveDataLogging()
+            .AddInterceptors(softDeleteInterceptor, auditableEntityInterceptor)
             .Options;
 
         DbContext = new ApplicationDbContext(options);
@@ -69,7 +73,8 @@ public abstract class TestBase : IDisposable
         JwtServiceMock
             .Setup(service => service.GenerateAccessToken(
                 It.IsAny<UserAccount>(),
-                It.IsAny<IReadOnlyCollection<string>>()))
+                It.IsAny<IReadOnlyCollection<string>>(),
+                It.IsAny<DateTimeOffset>()))
             .Returns("access-token");
 
         JwtServiceMock

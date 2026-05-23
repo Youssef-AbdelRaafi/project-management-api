@@ -14,9 +14,9 @@ public sealed class GetTasksByProjectQueryHandler(
     IApplicationDbContext dbContext,
     ICurrentUserService currentUser,
     IMapper mapper)
-    : IRequestHandler<GetTasksByProjectQuery, Result<IReadOnlyCollection<TaskDto>>>
+    : IRequestHandler<GetTasksByProjectQuery, Result<PaginatedList<TaskDto>>>
 {
-    public async Task<Result<IReadOnlyCollection<TaskDto>>> Handle(
+    public async Task<Result<PaginatedList<TaskDto>>> Handle(
         GetTasksByProjectQuery request,
         CancellationToken cancellationToken)
     {
@@ -50,11 +50,11 @@ public sealed class GetTasksByProjectQueryHandler(
             query = query.Where(task => task.Status == request.Status.Value);
         }
 
-        var tasks = await query
-            .OrderBy(task => task.CreatedAt)
-            .ProjectTo<TaskDto>(mapper.ConfigurationProvider)
-            .ToListAsync(cancellationToken);
+        var tasks = await PaginatedList<TaskDto>.CreateAsync(
+            query.OrderBy(task => task.CreatedAt).ProjectTo<TaskDto>(mapper.ConfigurationProvider),
+            request.PageNumber,
+            request.PageSize);
 
-        return Result<IReadOnlyCollection<TaskDto>>.Success(tasks);
+        return Result<PaginatedList<TaskDto>>.Success(tasks);
     }
 }

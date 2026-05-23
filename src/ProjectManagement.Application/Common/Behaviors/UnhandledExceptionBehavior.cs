@@ -17,7 +17,8 @@ public sealed class UnhandledExceptionBehavior<TRequest, TResponse>(
         {
             return await next();
         }
-        catch (Exception exception)
+        catch (Exception exception) when (exception is not FluentValidation.ValidationException
+            and not ProjectManagement.Domain.Exceptions.DomainException)
         {
             var requestName = typeof(TRequest).Name;
             var sanitizedRequest = RequestLogSanitizer.Sanitize(request);

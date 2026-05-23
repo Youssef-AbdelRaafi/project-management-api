@@ -84,7 +84,8 @@ public sealed class LoginCommandHandlerTests : TestBase
         JwtServiceMock.Verify(
             service => service.GenerateAccessToken(
                 It.IsAny<UserAccount>(),
-                It.IsAny<IReadOnlyCollection<string>>()),
+                It.IsAny<IReadOnlyCollection<string>>(),
+                It.IsAny<DateTimeOffset>()),
             Times.Never);
     }
 }

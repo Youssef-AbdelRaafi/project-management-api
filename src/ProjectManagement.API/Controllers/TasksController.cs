@@ -45,7 +45,7 @@ public sealed class TasksController(ISender sender) : ControllerBase
     }
 
     [HttpGet("projects/{projectId:guid}/tasks")]
-    [ProducesResponseType(typeof(Result<IReadOnlyCollection<TaskDto>>), AspNetStatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<PaginatedList<TaskDto>>), AspNetStatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result<object>), AspNetStatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result<object>), AspNetStatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(Result<object>), AspNetStatusCodes.Status403Forbidden)]
@@ -53,9 +53,11 @@ public sealed class TasksController(ISender sender) : ControllerBase
     public async Task<IActionResult> GetByProject(
         Guid projectId,
         [FromQuery] DomainTaskStatus? status,
-        CancellationToken cancellationToken)
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
     {
-        var result = await sender.Send(new GetTasksByProjectQuery(projectId, status), cancellationToken);
+        var result = await sender.Send(new GetTasksByProjectQuery(projectId, status, pageNumber, pageSize), cancellationToken);
 
         return StatusCode(result.StatusCode, result);
     }
@@ -95,7 +97,7 @@ public sealed class TasksController(ISender sender) : ControllerBase
     public sealed record CreateTaskRequest(
         string Title,
         string? Description,
-        DateTime DueDate,
+        DateTimeOffset DueDate,
         TaskPriority Priority);
 
     public sealed record UpdateTaskStatusRequest(DomainTaskStatus Status);

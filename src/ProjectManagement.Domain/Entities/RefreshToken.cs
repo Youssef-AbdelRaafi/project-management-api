@@ -9,13 +9,13 @@ public sealed class RefreshToken : BaseEntity
     {
     }
 
-    private RefreshToken(string tokenHash, DateTimeOffset expiresAt, string userId, string? createdByIp)
+    private RefreshToken(string tokenHash, DateTimeOffset expiresAt, string userId, string? createdByIp, DateTimeOffset utcNow)
     {
         TokenHash = tokenHash;
         ExpiresAt = expiresAt;
         UserId = userId;
         CreatedByIp = createdByIp;
-        CreatedAt = DateTimeOffset.UtcNow;
+        CreatedAt = utcNow;
     }
 
     public string TokenHash { get; private set; } = string.Empty;
@@ -42,14 +42,15 @@ public sealed class RefreshToken : BaseEntity
         string tokenHash,
         DateTimeOffset expiresAt,
         string userId,
-        string? createdByIp)
+        string? createdByIp,
+        DateTimeOffset utcNow)
     {
         ValidateTokenHash(tokenHash);
-        ValidateExpiry(expiresAt);
+        ValidateExpiry(expiresAt, utcNow);
         ValidateUserId(userId);
         ValidateIpAddress(createdByIp, nameof(createdByIp));
 
-        return new RefreshToken(tokenHash.Trim(), expiresAt, userId.Trim(), NormalizeOptionalText(createdByIp));
+        return new RefreshToken(tokenHash.Trim(), expiresAt, userId.Trim(), NormalizeOptionalText(createdByIp), utcNow);
     }
 
     public bool IsExpired(DateTimeOffset utcNow)
@@ -104,9 +105,9 @@ public sealed class RefreshToken : BaseEntity
         }
     }
 
-    private static void ValidateExpiry(DateTimeOffset expiresAt)
+    private static void ValidateExpiry(DateTimeOffset expiresAt, DateTimeOffset utcNow)
     {
-        if (expiresAt <= DateTimeOffset.UtcNow)
+        if (expiresAt <= utcNow)
         {
             throw new DomainException("Refresh token expiry must be in the future.");
         }

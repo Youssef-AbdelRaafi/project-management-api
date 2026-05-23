@@ -29,7 +29,7 @@ public sealed class CreateTaskHandlerTests : TestBase
             project.Id,
             "Build task tests",
             "Cover ownership through project",
-            DateTime.UtcNow.AddDays(5),
+            DateTimeOffset.UtcNow.AddDays(5),
             TaskPriority.High);
 
         // Act
@@ -62,7 +62,7 @@ public sealed class CreateTaskHandlerTests : TestBase
             Guid.NewGuid(),
             "Build task tests",
             "Cover ownership through project",
-            DateTime.UtcNow.AddDays(5),
+            DateTimeOffset.UtcNow.AddDays(5),
             TaskPriority.High);
 
         // Act
@@ -88,7 +88,7 @@ public sealed class CreateTaskHandlerTests : TestBase
             project.Id,
             "Build task tests",
             "Cover ownership through project",
-            DateTime.UtcNow.AddDays(5),
+            DateTimeOffset.UtcNow.AddDays(5),
             TaskPriority.High);
 
         // Act
