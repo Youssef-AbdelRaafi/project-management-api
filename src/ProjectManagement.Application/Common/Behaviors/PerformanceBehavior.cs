@@ -6,7 +6,7 @@ using ProjectManagement.Application.Common.Interfaces;
 namespace ProjectManagement.Application.Common.Behaviors;
 
 public sealed class PerformanceBehavior<TRequest, TResponse>(
-    ILogger<TRequest> logger,
+    ILogger<PerformanceBehavior<TRequest, TResponse>> logger,
     ICurrentUserService currentUser)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull

@@ -50,6 +50,19 @@ public sealed class AuthController(ISender sender) : ControllerBase
         return ToActionResult(result);
     }
 
+    [HttpPost("logout")]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [ProducesResponseType(AspNetStatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result<object>), AspNetStatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result<object>), AspNetStatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Logout(
+        [FromBody] ProjectManagement.Application.Features.Auth.Commands.Logout.LogoutCommand command,
+        CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result);
+    }
+
     private ObjectResult ToActionResult(Result<AuthResponseDto> result)
     {
         return StatusCode(result.StatusCode, result);
